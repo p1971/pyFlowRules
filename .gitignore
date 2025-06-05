@@ -1,0 +1,41 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+env/
+venv/
+ENV/
+.venv/
+.ENV/
+
+# Distribution / packaging
+*.egg-info/
+*.egg
+dist/
+build/
+*.egg-info/
+
+# Installed dependency folders
+*.egg-info/
+pip-wheel-metadata/
+
+# Logs and Database (Optional)
+*.log
+*.sqlite3
+
+# Secrets (Optional)
+*.env
+*.secret
+
+# IDE and Editor Files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Operating system files
+.DS_Store
+Thumbs.db
