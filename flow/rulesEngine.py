@@ -7,33 +7,34 @@ from functools import wraps
 
 @dataclass(frozen=True)
 class RuleResult:
-    id: str
+    rule_id: str
+    rule_name: str
     passed: bool
     failure_message: Optional[str] = None
     error_message: Optional[str] = None
 
     @staticmethod
-    def as_success(id: str) -> "RuleResult":
-        return RuleResult(id, passed=True)
+    def as_success(rule_id: str, rule_name: str) -> "RuleResult":
+        return RuleResult(rule_id, rule_name, passed=True)
 
     @staticmethod
-    def as_failure(id: str, failure_message: str) -> "RuleResult":
-        return RuleResult(id=id, failure_message=failure_message, passed=False)
+    def as_failure(rule_id: str, rule_name: str, failure_message: str) -> "RuleResult":
+        return RuleResult(rule_id, rule_name, failure_message=failure_message, passed=False)
 
     @staticmethod
-    def as_error(id: str, error: str) -> "RuleResult":
-        return RuleResult(id=id, error_message=error, passed=False)
+    def as_error(rule_id: str, rule_name: str, error: str) -> "RuleResult":
+        return RuleResult(rule_id, rule_name, error_message=error, passed=False)
 
 
 @dataclass(frozen=True)
-class PolicyResult():
+class PolicyResult:
     policy_id: str
     policy_name: str
     rule_results: Dict[str, RuleResult]
     success: bool = False
 
 
-class Policy():
+class Policy:
     def execute(self, request: Any) -> PolicyResult:
         return self.execute_policy(request)
 
@@ -50,6 +51,7 @@ def policy(policy_name: str, policy_id: str):
 
         def execute(self, dto) -> PolicyResult:
             rule_results = []
+            success = False
             if methods_with_decorator:
                 for method_name in methods_with_decorator:
                     method = getattr(self, method_name)
@@ -57,8 +59,8 @@ def policy(policy_name: str, policy_id: str):
                     rule_results.append(result)
                 success = all(result.passed for result in rule_results if result is not None)
 
-                return PolicyResult(policy_id=policy_id, policy_name=policy_name,
-                                    rule_results={result.id: result for result in rule_results}, success=success)
+            return PolicyResult(policy_id=policy_id, policy_name=policy_name,
+                                rule_results={result.rule_id: result for result in rule_results}, success=success)
 
         cls.execute_policy = execute
         return cls
@@ -66,22 +68,23 @@ def policy(policy_name: str, policy_id: str):
     return decorator
 
 
-def rule(rule_id: str, rule_name: str, failure_message: str | None):
+def rule(rule_id: str, rule_name: str, failure_message: Optional[str] = None):
     def rule_decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             try:
                 passed = func(*args, **kwargs)
                 if passed:
-                    return RuleResult.as_success(wrapper.rule_id)
+                    return RuleResult.as_success(wrapper.rule_id, wrapper.rule_name)
                 else:
-                    context = vars(args[1])
-                    message = Template(failure_message).substitute(context)
-                    return RuleResult.as_failure(wrapper.rule_id,
-                                                 failure_message=message if failure_message else "Rule Failed")
+                    message = "Rule failed"
+                    if failure_message is not None:
+                        context = vars(args[1])
+                        message = Template(failure_message).substitute(context)
+                    return RuleResult.as_failure(wrapper.rule_id, wrapper.rule_name, failure_message=message)
 
             except Exception as ex:
-                return RuleResult.as_error(wrapper.rule_id, ex)
+                return RuleResult.as_error(wrapper.rule_id, wrapper.rule_name, str(ex))
 
         wrapper.rule_id = rule_id
         wrapper.rule_name = rule_name
