@@ -1,9 +1,11 @@
 from dataclasses import dataclass
 import inspect
+import logging
 from string import Template
 from typing import Optional, Dict, Any
 from functools import wraps
 
+logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class RuleResult:
@@ -84,6 +86,7 @@ def rule(rule_id: str, rule_name: str, failure_message: Optional[str] = None):
                     return RuleResult.as_failure(wrapper.rule_id, wrapper.rule_name, failure_message=message)
 
             except Exception as ex:
+                logger.error("an error occurred in rule %s:%s: %s", wrapper.rule_id, wrapper.rule_name, str(ex))
                 return RuleResult.as_error(wrapper.rule_id, wrapper.rule_name, str(ex))
 
         wrapper.rule_id = rule_id

@@ -1,7 +1,7 @@
-# Project Name
+# py flow rules
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python Version](https://img.shields.io/badge/Python-3.10-blue.svg)](#)
+[![Python Version](https://img.shields.io/badge/Python-3.11-blue.svg)](#)
 
 A simple rules engine implementation for python.
 
@@ -71,12 +71,6 @@ pip install pytest  # Install pytest if not already done
 pytest
 ```
 
-Or, if you prefer to use Python's built-in `unittest` framework:
-
-```bash
-python -m unittest discover tests
-```
-
 ---
 
 ## Contributing
@@ -97,9 +91,3 @@ Make sure your code passes all tests and follows Python best practices.
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-
-## Acknowledgements
-
-- Mention any libraries, frameworks, or tutorials that helped you.
-- Example: "Thanks to the Python community for inspiring this project!"
-- Include logos, credits, or external tools if relevant.

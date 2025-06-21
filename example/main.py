@@ -29,6 +29,13 @@ class InitialRequestPolicy(Policy):
     def validate_client(self, r: Request):
         return r.client in ["client1", "client2"]
 
+    @rule(
+        rule_id="R003",
+        rule_name="Rule throwing an exception",
+        failure_message="This one throws an exception.")
+    def throw_an_exception(self, r: Request):
+        raise ValueError("An error occurred in the rule execution.")
+
 def main():
 
     console = Console()
