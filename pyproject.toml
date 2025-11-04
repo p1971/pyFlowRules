@@ -5,9 +5,6 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "py-flow-rules"
 dynamic = ["version"]
-
-[tool.setuptools.dynamic]
-version = {attr = "flowrules.__version__.__version__"}
 description = "A simple rules engine package for python"
 readme = "README.md"
 authors = [
@@ -27,6 +24,9 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: Libraries :: Application Frameworks"
 ]
+
+[tool.setuptools.dynamic]
+version = {attr = "flowrules.__version__.__version__"}
 
 [tool.pytest.ini_options]
 addopts = "--cov=flowrules --cov-report=xml"
