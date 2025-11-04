@@ -10,6 +10,5 @@ def test_version_format():
 
 
 def test_version_import():
-    """Test that version is available on the package."""
-    assert hasattr(__version__, "__version__")
+    """Test that version is available and is a string."""
     assert isinstance(__version__, str)
