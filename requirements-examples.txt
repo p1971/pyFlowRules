@@ -1,0 +1,2 @@
+# Example dependencies for pyFlowRules
+rich==14.0.0    # Used in example/main.py for pretty table output

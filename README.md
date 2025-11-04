@@ -21,11 +21,27 @@ Clone this repository and install the necessary dependencies.
 git clone https://github.com/p1971/pyFlowRules.git
 cd pyFlowRules
 python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+source .venv/bin/activate  # On Windows use: .\.venv\Scripts\activate
+
+# For core functionality only (no dependencies required):
+pip install -e .
+
+# For development (includes testing tools):
+pip install -r requirements-dev.txt
+
+# For running examples:
+pip install -r requirements-examples.txt
 ```
 
 Make sure you have Python 3.10 or above installed.
+
+### Requirements Files
+
+The project uses separate requirements files for different purposes:
+
+- `requirements.txt` - Core dependencies (currently empty as we only use standard library)
+- `requirements-dev.txt` - Development dependencies (pytest, coverage, etc.)
+- `requirements-examples.txt` - Dependencies for running example code
 
 ---
 

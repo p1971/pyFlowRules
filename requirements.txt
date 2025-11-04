@@ -1,4 +1,8 @@
-pytest==8.4.0
-pytest-cov==6.1.1
-setuptools==80.9.0
-rich==14.0.0
+# Core dependencies for pyFlowRules
+# Currently empty as the package only uses Python standard library modules:
+# - dataclasses
+# - inspect
+# - logging
+# - string
+# - typing
+# - functools
