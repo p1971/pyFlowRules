@@ -3,6 +3,7 @@
 # Testing frameworks
 pytest==8.4.0        # Unit testing framework
 pytest-cov==6.1.1    # Code coverage plugin for pytest
+coverage>=7.5.0      # Code coverage analysis
 
 # Build tools
 setuptools==80.9.0   # Package build and distribution tools

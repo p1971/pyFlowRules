@@ -29,5 +29,5 @@ classifiers = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "--cov=flowrules"
+addopts = "--cov=flowrules --cov-report=xml"
 testpaths = ["tests"]
