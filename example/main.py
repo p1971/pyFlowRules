@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from rich.table import Table
 
@@ -6,7 +6,7 @@ from flow.rulesEngine import policy, rule, Policy
 
 from rich.console import Console
 
-@dataclass
+@dataclass(frozen=True)
 class Request:
     id: int
     notional: float
@@ -36,6 +36,15 @@ class InitialRequestPolicy(Policy):
     def throw_an_exception(self, r: Request):
         raise ValueError("An error occurred in the rule execution.")
 
+@policy(policy_id="P02", policy_name="PostValidation")
+class PostValidationPolicy(Policy):
+    @rule(
+        rule_id="R2001",
+        rule_name="Validate notional",
+        failure_message="The notional is too high.")
+    def validate_notional(self, r: Request):
+        return r.notional < 200000
+
 def main():
 
     console = Console()
@@ -43,6 +52,11 @@ def main():
     request = Request(id=1, notional=500000, client="client1")
     policy_instance = InitialRequestPolicy()
     result = policy_instance.execute(request)
+
+    post_policy_instance = PostValidationPolicy()
+    post_result = post_policy_instance.execute(request)
+    for rule_id, rule_result in post_result.rule_results.items():
+        print(post_result.policy_id,post_result.policy_name, rule_id, rule_result.passed)
 
     table = Table(show_lines=False, box=None)
     table.add_column()

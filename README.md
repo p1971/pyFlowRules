@@ -18,8 +18,10 @@ A simple rules engine implementation for python.
 Clone this repository and install the necessary dependencies.
 
 ```bash
-git clone https://github.com/yourusername/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/p1971/pyFlowRules.git
+cd pyFlowRules
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -58,8 +60,11 @@ result = policy.execute(Request(id=1, notional=90000, client="client1"))
 print(result)
 ```
 
-You can find more examples in the `examples/` directory (if applicable).
-
+You can find more examples in the `examples/` directory.
+For example
+```bash
+python -m example.main
+```
 ---
 
 ## Running Tests

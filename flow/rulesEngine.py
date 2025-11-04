@@ -40,6 +40,9 @@ class Policy:
     def execute(self, request: Any) -> PolicyResult:
         return self.execute_policy(request)
 
+    def execute_policy(self, request: Any) -> PolicyResult:
+        raise NotImplementedError("Subclasses must implement execute_policy or use the @policy decorator.")
+
 
 def policy(policy_name: str, policy_id: str):
     def decorator(cls):
@@ -61,10 +64,13 @@ def policy(policy_name: str, policy_id: str):
                     rule_results.append(result)
                 success = all(result.passed for result in rule_results if result is not None)
 
-            return PolicyResult(policy_id=policy_id, policy_name=policy_name,
-                                rule_results={result.rule_id: result for result in rule_results}, success=success)
+            return PolicyResult(policy_id=policy_id,
+                                policy_name=policy_name,
+                                rule_results={result.rule_id: result for result in rule_results},
+                                success=success)
 
         cls.execute_policy = execute
+
         return cls
 
     return decorator
