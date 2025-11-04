@@ -1,0 +1,92 @@
+name: Version Management
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      description:
+        description: 'Version bump description'
+        required: true
+        type: string
+
+jobs:
+  bump_version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
+
+    - name: Update Version and Changelog
+      run: |
+        # Read current version
+        VERSION=$(python -c "from flowrules.__version__ import __version__; print(__version__)")
+        echo "Current version: $VERSION"
+        
+        # Split version
+        IFS='.' read -r major minor patch <<< "$VERSION"
+        
+        # Bump version based on input
+        case "${{ github.event.inputs.bump_type }}" in
+          "major")
+            major=$((major + 1))
+            minor=0
+            patch=0
+            ;;
+          "minor")
+            minor=$((minor + 1))
+            patch=0
+            ;;
+          "patch")
+            patch=$((patch + 1))
+            ;;
+        esac
+        
+        # Create new version string
+        NEW_VERSION="${major}.${minor}.${patch}"
+        echo "New version: $NEW_VERSION"
+        echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
+        
+        # Update version file
+        sed -i "s/__version__ = \".*\"/__version__ = \"$NEW_VERSION\"/" flowrules/__version__.py
+        
+        # Update CHANGELOG.md
+        DATE=$(date +%Y-%m-%d)
+        
+        # Create new changelog entry
+        NEW_ENTRY="## [$NEW_VERSION] - $DATE\n\n### ${CHANGE_TYPE:-Changed}\n- ${{ github.event.inputs.description }}\n"
+        
+        # Add new entry and update links
+        sed -i "/## \[Unreleased\]/a\\${NEW_ENTRY}" CHANGELOG.md
+        sed -i "s|\[Unreleased\]: .*|[Unreleased]: https://github.com/p1971/pyFlowRules/compare/v${NEW_VERSION}...HEAD|" CHANGELOG.md
+        echo -e "\n[${NEW_VERSION}]: https://github.com/p1971/pyFlowRules/releases/tag/v${NEW_VERSION}" >> CHANGELOG.md
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
+      with:
+        commit-message: "chore: bump version (${{ github.event.inputs.bump_type }})"
+        title: "Version Bump: ${{ github.event.inputs.bump_type }}"
+        body: |
+          Version bump: ${{ github.event.inputs.bump_type }}
+          
+          Description:
+          ${{ github.event.inputs.description }}
+        branch: "version-bump"
+        delete-branch: true
+        labels: "version-bump"

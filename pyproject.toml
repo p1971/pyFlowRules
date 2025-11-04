@@ -1,3 +1,33 @@
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "py-flow-rules"
+dynamic = ["version"]
+
+[tool.setuptools.dynamic]
+version = {attr = "flowrules.__version__.__version__"}
+description = "A simple rules engine package for python"
+readme = "README.md"
+authors = [
+    { name = "Pete Robinson", email = "pete@madhippy.com" }
+]
+license = "MIT"
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries :: Application Frameworks"
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov=flowrules"
+testpaths = ["tests"]

@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from rich.table import Table
 
-from flow.rulesEngine import policy, rule, Policy
+from flowrules.rules_engine import policy, rule, Policy
 
 from rich.console import Console
 

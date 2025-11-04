@@ -1,5 +1,5 @@
 import pytest
-from flow.rulesEngine import RuleResult, PolicyResult, rule, policy, Policy
+from flowrules.rules_engine import RuleResult, PolicyResult, rule, policy, Policy
 
 
 def test_rule_result_as_success():

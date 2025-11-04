@@ -1,7 +1,12 @@
 # py flow rules
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python Version](https://img.shields.io/badge/Python-3.11-blue.svg)](#)
+[![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](#)
+[![PyPI version](https://badge.fury.io/py/py-flow-rules.svg)](https://badge.fury.io/py/py-flow-rules)
+[![CI Status](https://github.com/p1971/pyFlowRules/workflows/CI/badge.svg)](https://github.com/p1971/pyFlowRules/actions)
+[![Coverage](https://codecov.io/gh/p1971/pyFlowRules/branch/main/graph/badge.svg)](https://codecov.io/gh/p1971/pyFlowRules)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Downloads](https://pepy.tech/badge/py-flow-rules)](https://pepy.tech/project/py-flow-rules)
 
 A simple rules engine implementation for python.
 
@@ -35,6 +40,16 @@ pip install -r requirements-examples.txt
 
 Make sure you have Python 3.10 or above installed.
 
+### Versioning
+
+This project follows [Semantic Versioning](https://semver.org/). Version numbers are in the format MAJOR.MINOR.PATCH:
+
+- MAJOR version for incompatible API changes
+- MINOR version for added functionality in a backwards compatible manner
+- PATCH version for backwards compatible bug fixes
+
+Current version: ![PyPI](https://img.shields.io/pypi/v/py-flow-rules)
+
 ### Requirements Files
 
 The project uses separate requirements files for different purposes:
@@ -52,7 +67,7 @@ Here is an example of how to use the project:
 ```python
 from dataclasses import dataclass
 
-from flow.rulesEngine import policy, rule, Policy
+from flowrules.rules_engine import policy, rule, Policy
 
 @dataclass
 class Request:
