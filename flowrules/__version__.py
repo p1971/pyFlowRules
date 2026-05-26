@@ -1,3 +1,3 @@
 """Version information."""
 
-__version__ = "0.1.0"  # Major.Minor.Patch format
+__version__ = "1.0.0"  # Major.Minor.Patch format
