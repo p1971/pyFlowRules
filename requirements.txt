@@ -1,8 +1,8 @@
 # Core dependencies for pyFlowRules
 # Currently empty as the package only uses Python standard library modules:
 # - dataclasses
-# - inspect
 # - logging
 # - string
+# - collections.abc
 # - typing
 # - functools

@@ -91,7 +91,7 @@ result = policy.execute(Request(id=1, notional=90000, client="client1"))
 print(result)
 ```
 
-You can find more examples in the `examples/` directory.
+You can find more examples in the `example/` directory.
 For example
 ```bash
 python -m example.main
