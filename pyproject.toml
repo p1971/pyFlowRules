@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel"]
+requires = ["setuptools>=82.0.1", "wheel>=0.47.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -12,6 +12,7 @@ authors = [
 ]
 license = "MIT"
 requires-python = ">=3.10"
+dependencies = []
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -21,9 +22,32 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: Libraries :: Application Frameworks"
 ]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0.3,<10",
+    "pytest-cov>=7.1.0,<8",
+    "coverage>=7.14.1,<8",
+    "build>=1.5.0,<2",
+    "twine>=6.2.0,<7",
+]
+examples = [
+    "rich==15.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/p1971/pyFlowRules"
+Repository = "https://github.com/p1971/pyFlowRules"
+Issues = "https://github.com/p1971/pyFlowRules/issues"
+Changelog = "https://github.com/p1971/pyFlowRules/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+include = ["flowrules*"]
+exclude = ["example*", "tests*"]
 
 [tool.setuptools.dynamic]
 version = {attr = "flowrules.__version__.__version__"}

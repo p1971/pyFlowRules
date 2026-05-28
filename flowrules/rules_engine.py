@@ -6,9 +6,9 @@ It supports rule chaining, error handling, and policy execution with detailed re
 """
 
 from dataclasses import dataclass
-import inspect
 import logging
 from string import Template
+from collections.abc import Mapping
 from typing import Optional, Dict, Any, Type, TypeVar, Callable
 from functools import wraps
 
@@ -116,10 +116,13 @@ def policy(policy_name: str, policy_id: str) -> Callable[[Type[T]], Type[T]]:
         cls.policy_name = policy_name
         cls.policy_id = policy_id
 
-        methods_with_decorator = []
-        for name, obj in inspect.getmembers(cls, inspect.isfunction):
-            if getattr(obj, "is_rule", False):
-                methods_with_decorator.append(name)
+        methods_with_decorator = {}
+        for base_cls in reversed(cls.__mro__):
+            for name, obj in base_cls.__dict__.items():
+                if getattr(obj, "is_rule", False):
+                    methods_with_decorator[name] = obj
+                elif name in methods_with_decorator:
+                    del methods_with_decorator[name]
 
         def execute(self, request: Any) -> PolicyResult:
             """Execute all rules in the policy against the request.
@@ -161,7 +164,7 @@ def rule(rule_id: str, rule_name: str, failure_message: Optional[str] = None) ->
     Args:
         rule_id: Unique identifier for the rule
         rule_name: Human-readable name for the rule
-        failure_message: Optional template string for failure messages. Can use {varname}
+        failure_message: Optional template string for failure messages. Can use ${varname}
                         syntax to insert values from the request object
 
     Returns:
@@ -182,8 +185,8 @@ def rule(rule_id: str, rule_name: str, failure_message: Optional[str] = None) ->
                 else:
                     message = "Rule failed"
                     if failure_message is not None:
-                        context = vars(args[1])  # args[1] is the request object
-                        message = Template(failure_message).substitute(context)
+                        context = _request_context(args[1])
+                        message = Template(failure_message).safe_substitute(context)
                     return RuleResult.as_failure(wrapper.rule_id, wrapper.rule_name, failure_message=message)
 
             except Exception as ex:
@@ -196,3 +199,14 @@ def rule(rule_id: str, rule_name: str, failure_message: Optional[str] = None) ->
         return wrapper
 
     return rule_decorator
+
+
+def _request_context(request: Any) -> Dict[str, Any]:
+    """Return template values for request-like objects."""
+    if isinstance(request, Mapping):
+        return dict(request)
+
+    try:
+        return vars(request)
+    except TypeError:
+        return {}

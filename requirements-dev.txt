@@ -1,12 +1,12 @@
 # Development dependencies for pyFlowRules
 
 # Testing frameworks
-pytest>=8.4,<9          # Unit testing framework
-pytest-cov>=4.0,<7      # Code coverage plugin for pytest
-coverage>=7.5.0         # Code coverage analysis
+pytest>=9.0.3,<10       # Unit testing framework
+pytest-cov>=7.1.0,<8    # Code coverage plugin for pytest
+coverage>=7.14.1,<8     # Code coverage analysis
 
 # Build tools
-setuptools>=65.0        # Package build and distribution tools
-wheel>=0.38             # Wheel package for building wheels
-build>=0.10             # PEP 517 build frontend
-twine>=4.0              # Package upload tool
+setuptools>=82.0.1      # Package build and distribution tools
+wheel>=0.47.0           # Wheel package for building wheels
+build>=1.5.0,<2         # PEP 517 build frontend
+twine>=6.2.0,<7         # Package upload tool
